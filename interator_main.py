@@ -6,11 +6,10 @@
 #
 """
 
-from math import gcd
-from itertools import count, cycle, compress
-from random import randint
-from time import time
-from collections import deque
+import math
+import itertools as it
+import random
+import collections
 
 ## SEQUENCE GENERATORS
 def prime_stream():
@@ -20,10 +19,10 @@ def prime_stream():
     yield 2; yield 3; yield 5; yield 7; yield 11
 
     sieve = {}
-    mod = frozenset(i for i in range(c) if gcd(i, c) == 1)
+    mod = frozenset(i for i in range(c) if math.gcd(i, c) == 1)
     skip = tuple([1 if n % c in mod else 0 for n in range(start, start + c, 2)])
             
-    for n in compress(count(start, 2), cycle(skip)):
+    for n in it.compress(it.count(start, 2), it.cycle(skip)):
         if n not in sieve:
             sieve[n*n] = n; yield n
         else:
@@ -38,7 +37,7 @@ def composite_stream():
     primes = prime_stream()
     next_prime = next(primes)
     
-    for n in count(1):
+    for n in it.count(1):
         if n != next_prime:
             yield n
         else:
@@ -58,7 +57,7 @@ def polygonal_stream(s):
     int
         Yield P(s, 1), P(s, 2), P(s, 3)... and so on.    
     '''
-    for n in count(1):
+    for n in it.count(1):
         yield int(((s - 2)*n*n - (s - 4)*n) / 2)
         
 
@@ -83,7 +82,7 @@ def fibonacci_stream(start = (0, 1)):
     for n in start:
         yield n
         
-    last = deque(start, len(start))
+    last = collections.deque(start, len(start))
     
     while True:
         next_n = sum(last)
@@ -112,7 +111,7 @@ def pell_stream(start = (0, 1)):
     for n in start:
         yield n
         
-    last = deque(start, 2)
+    last = collections.deque(start, 2)
     
     while True:
         next_n = 2*last[1] + last[0]
@@ -175,7 +174,7 @@ def miller_rabin(n, k = 8):
         d //= 2
     
     for _ in range(k):
-        a = randint(2, n - 2)
+        a = random.randint(2, n - 2)
         x = pow(a, d, n)
         
         if x == 1 or x == n - 1: continue

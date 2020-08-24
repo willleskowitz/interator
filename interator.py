@@ -1,10 +1,5 @@
-"""
-# Name:         Will Leskowitz
-# Project:      interator
-# Script:       main
-# Date:         Mon Aug 17 13:51:07 2020
-#
-"""
+ #!/usr/bin/env python
+"""Module for integer sequence generation and related conditional tests."""
 
 import math
 import itertools as it
@@ -28,7 +23,8 @@ def prime_stream():
         else:
             prime = sieve.pop(n)
             m = n + 2*prime
-            while m in sieve or m % c not in mod: m += 2*prime
+            while m in sieve or m % c not in mod:
+                m += 2*prime
             sieve[m] = prime
             
 
@@ -236,6 +232,9 @@ def is_polygonal(n, s):
     denominator = 2*(s - 2) 
     return (numerator / denominator) % 1 == 0 
 
+def perfect_square(x):
+        sqaure = round(x**0.5)
+        return sqaure * sqaure == x
 
 def is_fibonacci(n):
     '''Test if n is a Fibonacci number.
@@ -253,10 +252,6 @@ def is_fibonacci(n):
     '''
     if n < 0:
         return False
-    
-    def perfect_square(x):
-        sqaure = round(x**0.5)
-        return sqaure * sqaure == x
         
     return perfect_square(5*n*n + 4) or perfect_square(5*n*n - 4)
 
@@ -285,7 +280,4 @@ def is_pell(n, start = (0, 1)):
             return True
         if pell > n:
             return False
-          
-            
-if __name__ == '__main__':
-    pass
+   

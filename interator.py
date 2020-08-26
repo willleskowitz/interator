@@ -318,7 +318,7 @@ def is_pell(n, start = (0, 1)):
    
 
 ## INDEX
-def nth_fibonacci(n, start = (0, 0, 1)):
+def nth_fibonacci(n, start = (0, 1)):
     '''Return the Fibonacci number at index F(n).
     
     Parameters

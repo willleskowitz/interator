@@ -1,4 +1,4 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 """Module for integer sequence generation and related conditional tests."""
 
 import math
@@ -55,7 +55,7 @@ def polygonal_stream(s):
     '''
     for n in it.count(1):
         yield int(((s - 2)*n*n - (s - 4)*n) / 2)
-        
+            
 
 def fibonacci_stream(start = (0, 1)):
     '''Yield the next number in the Fibonacci sequence.
@@ -84,8 +84,36 @@ def fibonacci_stream(start = (0, 1)):
         next_n = sum(last)
         yield next_n
         last.append(next_n)
+
+
+def negafibonacci_stream(start = (0, 1)):
+    '''Yield the next number in the negaFibonacci sequence staring with F(0).
+    
+    Parameters
+    ----------
+    start : tuple or list of intengers, optional
+        Integers to initialize the negaFibonacci sequence. By changing start, 
+        other generalizations of the negaFibonacci numbers can be generated. For
+        instance, with start = (0, 0, 1), the negaTribonacci numbers will be 
+        generated. The default is (0, 1). 
+    
+    Yields
+    ------
+    int
+        After yielding F(0), the sequence will proceed into the negative index
+        with F(-1), F(-2), and so on. The length of start determines how many  
+        preceding values will be subtracted to generate the next value.
+    '''
+    yield start[0]
+    
+    last = collections.deque(start, len(start))
+    
+    while True:
+        next_n = last[-1] + last[-1] - sum(last)
+        yield next_n
+        last.appendleft(next_n)  
         
-        
+
 def pell_stream(start = (0, 1)):
     '''Yield the next Pell number.
 
@@ -106,13 +134,12 @@ def pell_stream(start = (0, 1)):
     '''
     for n in start:
         yield n
-        
-    last = collections.deque(start, 2)
-    
+
+    n1, n2 = start
     while True:
-        next_n = 2*last[1] + last[0]
+        next_n = n1 + n2 + n2
         yield next_n
-        last.append(next_n)
+        n1, n2 = n2, next_n
         
 
 ## TESTS
@@ -200,6 +227,9 @@ def is_composite(n):
     bool
         Return True if n is a composite number and False otherwise.
     '''
+    if n == 1:
+        return True
+    
     if n < 1 or n % 1 != 0:
         return False
     
@@ -233,8 +263,9 @@ def is_polygonal(n, s):
     return (numerator / denominator) % 1 == 0 
 
 def perfect_square(x):
-        sqaure = round(x**0.5)
-        return sqaure * sqaure == x
+    # FIXME! Test for perfect square without taking sqaure? Needs larger int processing
+    sqaure = int(x**0.5)
+    return sqaure * sqaure == x
 
 def is_fibonacci(n):
     '''Test if n is a Fibonacci number.
@@ -280,4 +311,3 @@ def is_pell(n, start = (0, 1)):
             return True
         if pell > n:
             return False
-   

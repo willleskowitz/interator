@@ -339,9 +339,10 @@ def nth_fibonacci(n, start = (0, 1)):
         of the preceding values. The length of start determines how many  
         preceding values will be summed to generate the next value.
     '''
-    if n == 0:
-        return start[0]
+    if n < len(start):
+        return start[n]
     
+    adjust = len(start) - 2    
     a_str = []
     for i in range(-1, len(start) - 1):
         if i == -1:
@@ -352,6 +353,6 @@ def nth_fibonacci(n, start = (0, 1)):
     a = np.matrix('; '.join(a_str), dtype=np.object)
     b = np.matrix('; '.join([str(i) for i in start]), dtype=np.object)     
     
-    return np.matmul(np.linalg.matrix_power(a, n - 1), b).item(0)
+    return np.matmul(np.linalg.matrix_power(a, n - adjust), b).item(0)
         
      

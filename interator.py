@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 """Module for integer sequence generation and related conditional tests."""
 
 import math
@@ -58,7 +58,7 @@ def polygonal_stream(s):
             
 
 def fibonacci_stream(start = (0, 1)):
-    '''Yield the next number in the Fibonacci sequence.
+    '''Yield the next number in the Fibonacci sequence starting with F(0).
     
     Parameters
     ----------
@@ -91,7 +91,7 @@ def negafibonacci_stream(start = (0, 1)):
     
     Parameters
     ----------
-    start : tuple or list of intengers, optional
+    start : tuple or list of integers, optional
         Integers to initialize the negaFibonacci sequence. By changing start, 
         other generalizations of the negaFibonacci numbers can be generated. For
         instance, with start = (0, 0, 1), the negaTribonacci numbers will be 
@@ -115,11 +115,11 @@ def negafibonacci_stream(start = (0, 1)):
         
 
 def pell_stream(start = (0, 1)):
-    '''Yield the next Pell number.
+    '''Yield the next Pell number starting with P(0).
 
     Parameters
     ----------
-    start : tuple or list of intengers, optional
+    start : tuple or list of integers, optional
         Integers to initialize the Pell sequence. The length of start must equal
         two. By changing start, other generalizations of the Pell numbers can 
         be generated. For instance, Pell–Lucas numbers can be generated with 
@@ -178,7 +178,7 @@ def miller_rabin(n, k = 8):
         n is the number to be tested.
     k : int, optional
         k determines the test's accuracy. It describes the number of iterations
-        of the test to be preformed. The default is 8.
+        of the test to be performed. The default is 8.
 
     Returns
     -------
@@ -243,7 +243,7 @@ def is_composite(n):
 
 
 def is_polygonal(n, s):
-    '''Test if n is an s-gonal number
+    '''Test if n is an s-gonal number.
 
     Parameters
     ----------
@@ -294,7 +294,7 @@ def is_pell(n, start = (0, 1)):
     ----------
     n : int
         n is the number to be tested.
-    start : tuple or list of intengers, optional
+    start : tuple or list of integers, optional
         Integers to initialize the Pell sequence. The length of start must equal
         two. By changing start, other generalizations of the Pell numbers can 
         be generated. For instance, Pell–Lucas numbers can be generated with 
@@ -311,3 +311,4 @@ def is_pell(n, start = (0, 1)):
             return True
         if pell > n:
             return False
+   

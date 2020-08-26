@@ -1,10 +1,11 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 """Module for integer sequence generation and related conditional tests."""
 
 import math
 import itertools as it
 import random
 import collections
+import numpy as np
 
 ## SEQUENCE GENERATORS
 def prime_stream():
@@ -84,7 +85,7 @@ def fibonacci_stream(start = (0, 1)):
         next_n = sum(last)
         yield next_n
         last.append(next_n)
-
+            
 
 def negafibonacci_stream(start = (0, 1)):
     '''Yield the next number in the negaFibonacci sequence staring with F(0).
@@ -157,6 +158,9 @@ def is_prime(n):
         Return True if n is a prime number and False otherwise.
 
     '''
+    if n == 2:
+        return True
+    
     if n < 2 or n % 1 != 0:
         return False
     
@@ -278,7 +282,7 @@ def is_fibonacci(n):
     Returns
     -------
     bool
-        Return True if n is a Fibonacci number and False otherwise.
+        Return True if n is a positive Fibonacci number and False otherwise.
 
     '''
     if n < 0:
@@ -286,7 +290,7 @@ def is_fibonacci(n):
         
     return perfect_square(5*n*n + 4) or perfect_square(5*n*n - 4)
 
-
+   
 def is_pell(n, start = (0, 1)):
     '''Test if n is a Pell number.
 
@@ -312,3 +316,42 @@ def is_pell(n, start = (0, 1)):
         if pell > n:
             return False
    
+
+## INDEX
+def nth_fibonacci(n, start = (0, 0, 1)):
+    '''Return the Fibonacci number at index F(n).
+    
+    Parameters
+    ----------
+    n : int, 
+        Index of the Fibonacci number.
+    
+    start : tuple or list of intengers, optional
+        Integers to initialize the Fibonacci sequence. By changing start, other 
+        generalizations of the Fibonacci numbers can be found. For instance, 
+        with start = (0, 0, 1), the Tribonacci number at index n will be 
+        returned. The default is (0, 1). 
+    
+    Yields
+    ------
+    int
+        After yielding the initial integers in start, the next value is the sum
+        of the preceding values. The length of start determines how many  
+        preceding values will be summed to generate the next value.
+    '''
+    if n == 0:
+        return start[0]
+    
+    a_str = []
+    for i in range(-1, len(start) - 1):
+        if i == -1:
+            a_str.append(' '.join('1' for _ in range(len(start))))
+        else:
+            a_str.append(' '.join('1' if i == j else '0' for j in range(len(start))))
+    
+    a = np.matrix('; '.join(a_str), dtype=np.object)
+    b = np.matrix('; '.join([str(i) for i in start]), dtype=np.object)     
+    
+    return np.matmul(np.linalg.matrix_power(a, n - 1), b).item(0)
+        
+     

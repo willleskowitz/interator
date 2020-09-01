@@ -14,7 +14,7 @@ Module for integer sequence generation and related conditional tests.
 | `is_lucas(n, P = 2, Q = -1, start = (0, 1))`  | Determine if n is within the (P,−Q)-Lucas sequence                                         |
 
 #### Generalizations
-By default, `fibonacci_stream`, `negafibonacci_stream`, `nth_fibonacci`, and `is_fibonacci` work with the Fibonacci numbers and `lucas_stream` and `is_lucas` work with the Pell numbers. However, by changing start, any generalization of these sequences can be generated. Here are some common examples:
+By default, `fibonacci_stream`, `negafibonacci_stream`, `nth_fibonacci`, and `is_fibonacci` work with the Fibonacci numbers, and `lucas_stream` and `is_lucas` work with the Pell numbers. However, by changing start, any generalization of these sequences can be generated. Here are some common examples:
 
 ```python
 import interator

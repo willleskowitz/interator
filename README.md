@@ -14,7 +14,7 @@ Module for integer sequence generation and related conditional tests.
 | `is_lucas(n, P = 2, Q = -1, start = (0, 1))`  | Determine if n is within the (P,−Q)-Lucas sequence                                         |
 
 #### Generalizations
-By default, `fibonacci_stream`, `negafibonacci_stream`, `nth_fibonacci`, and `is_fibonacci` work with the Fibonacci numbers and `lucas_stream` and `is_lucas` work with the Pell numbers. However, by changing start, any generalization of the these sequences can be generated. Here are some common examples:
+By default, `fibonacci_stream`, `negafibonacci_stream`, `nth_fibonacci`, and `is_fibonacci` work with the Fibonacci numbers and `lucas_stream` and `is_lucas` work with the Pell numbers. However, by changing start, any generalization of these sequences can be generated. Here are some common examples:
 
 ```python
 import interator
@@ -35,6 +35,21 @@ for name, start in numbers.items():
 ```
 
 Please note the Lucas numbers should not be confused with the Lucas sequence. The Lucas numbers are a specific example of the Lucas sequence.
+
+### Prime Numbers
+| **Functions**            | **Description**                                                     |
+|--------------------------|---------------------------------------------------------------------|
+| `prime_stream()`         | Yield the next prime number starting with 2                         |
+| `composite_stream()`     | Yield the next composite number starting with 1                     |
+| `is_prime()`             | Test the primality of n by checking potential prime factors         |
+| `miller_rabin(n, k = 8)` | Perform the Miller-Rabin Primality Test on n                        |
+| `is_composite(n)`        | Test if n is a composite number by checking potential prime factors |
+
+### Polygonal Numbers
+| **Functions**        | **Description**                               |
+|----------------------|-----------------------------------------------|
+| `polygonal_stream`   | Yield the next s-gonal number starting with 1 |
+| `is_polygonal(n, s)` | Test if n is an s-gonal number                |
 
 ## Licensing
 This project is licensed under the MIT License.

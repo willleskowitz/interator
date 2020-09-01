@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Module for integer sequence generation and related conditional tests."""
+'''Module for integer sequence generation and related conditional tests.'''
 
 import math
 import itertools as it
@@ -17,8 +17,8 @@ def prime_stream():
 
     sieve = {}
     mod = frozenset(i for i in range(c) if math.gcd(i, c) == 1)
-    skip = tuple([1 if n % c in mod else 0 for n in range(start, start + c, 2)])
-            
+    skip = tuple([1 if n % c in mod else 0 for n in range(start, start+c, 2)])
+
     for n in it.compress(it.count(start, 2), it.cycle(skip)):
         if n not in sieve:
             sieve[n*n] = n; yield n
@@ -28,93 +28,96 @@ def prime_stream():
             while m in sieve or m % c not in mod:
                 m += 2*prime
             sieve[m] = prime
-            
+
 
 def composite_stream():
     '''Yield the next composite number starting with 1.'''
     primes = prime_stream()
     next_prime = next(primes)
-    
+
     for n in it.count(1):
         if n != next_prime:
             yield n
         else:
             next_prime = next(primes)
-            
+
 
 def polygonal_stream(s):
     '''Yield the next s-gonal number starting with 1.
-    
+
     Parameters
     ----------
     s : int
         s is the number of sides in the polygon.
-        
+
     Yields
     ------
     int
-        Yield P(s, 1), P(s, 2), P(s, 3)... and so on.    
+        Yield P(s, 1), P(s, 2), P(s, 3)... and so on.
     '''
     for n in it.count(1):
         yield int(((s - 2)*n*n - (s - 4)*n) / 2)
-            
+
 
 def fibonacci_stream(start = (0, 1)):
-    '''Yield the next number in the Fibonacci sequence starting with F(0).
-    
+    '''Yield the next number in the Fibonacci sequence.
+
     Parameters
     ----------
     start : tuple or list of intengers, optional
-        Integers to initialize the Fibonacci sequence. By changing start, other 
-        generalizations of the Fibonacci numbers can be generated. For instance, 
-        with start = (0, 0, 1), the Tribonacci numbers will be generated. The 
-        default is (0, 1). 
-    
+        Integers to initialize the Fibonacci sequence. By changing
+        start, other generalizations of the Fibonacci numbers can be
+        generated. For instance, with start = (0, 0, 1), the Tribonacci
+        numbers will be generated. The default is (0, 1).
+
     Yields
     ------
     int
-        After yielding the initial integers in start, the next value is the sum
-        of the preceding values. The length of start determines how many  
-        preceding values will be summed to generate the next value.
+        After yielding the initial integers in start, the next value is
+        the sum of the preceding values. The length of start determines
+        how many preceding values will be summed to generate the next
+        value.
     '''
     for n in start:
         yield n
-        
+
     last = collections.deque(start, len(start))
-    
+
     while True:
         next_n = sum(last)
         yield next_n
         last.append(next_n)
-            
+
 
 def negafibonacci_stream(start = (0, 1)):
-    '''Yield the next number in the negaFibonacci sequence staring with F(0).
-    
+    '''Yield the next number in the negaFibonacci sequence.
+
     Parameters
     ----------
     start : tuple or list of integers, optional
-        Integers to initialize the negaFibonacci sequence. By changing start, 
-        other generalizations of the negaFibonacci numbers can be generated. For
-        instance, with start = (0, 0, 1), the negaTribonacci numbers will be 
-        generated. The default is (0, 1). 
-    
+        Integers to initialize the negaFibonacci sequence. By changing
+        start, other generalizations of the negaFibonacci numbers can
+        be generated. For instance, with start = (0, 0, 1), the
+        negaTribonacci numbers will be generated. The default is
+        (0, 1).
+
     Yields
     ------
     int
-        After yielding F(0), the sequence will proceed into the negative index
-        with F(-1), F(-2), and so on. The length of start determines how many  
-        preceding values will be subtracted to generate the next value.
+        After yielding F(0), the sequence will proceed into the
+        negative index with F(-1), F(-2), and so on. The length of
+        start determines how many preceding values will be subtracted
+        to generate the next value.
     '''
     yield start[0]
-    
+
     last = collections.deque(start, len(start))
-    
+
     while True:
         next_n = last[-1] + last[-1] - sum(last)
         yield next_n
-        last.appendleft(next_n)  
-        
+        last.appendleft(next_n)
+
 
 def pell_stream(start = (0, 1)):
     '''Yield the next Pell number starting with P(0).
@@ -122,16 +125,17 @@ def pell_stream(start = (0, 1)):
     Parameters
     ----------
     start : tuple or list of integers, optional
-        Integers to initialize the Pell sequence. The length of start must equal
-        two. By changing start, other generalizations of the Pell numbers can 
-        be generated. For instance, Pell–Lucas numbers can be generated with 
-        start = (2, 2). The default is (0, 1).
+        Integers to initialize the Pell sequence. The length of start
+        must equal two. By changing start, other generalizations of the
+        Pell can be generated. For instance, Pell–Lucas numbers can be
+        generated with start = (2, 2). The default is (0, 1).
 
     Yields
     ------
     int
-        After yielding the initial integers in start, the next value is the sum
-        of twice the previous Pell number and the Pell number before that.
+        After yielding the initial integers in start, the next value is
+        the sum of twice the previous Pell number and the Pell number
+        before that.
 
     '''
     for n in start:
@@ -142,11 +146,11 @@ def pell_stream(start = (0, 1)):
         next_n = n1 + n2 + n2
         yield next_n
         n1, n2 = n2, next_n
-        
+
 
 ## TESTS
 def is_prime(n):
-    '''Test the primality of n by checking potential prime factors of n.
+    '''Test the primality of n by checking potential prime factors.
 
     Parameters
     ----------
@@ -161,10 +165,10 @@ def is_prime(n):
     '''
     if n == 2:
         return True
-    
+
     if n < 2 or n % 1 != 0:
         return False
-    
+
     stop = n ** 0.5
     for prime in prime_stream():
         if n % prime == 0:
@@ -172,58 +176,58 @@ def is_prime(n):
         if stop < prime:
             break
     return True
-        
+
 
 def miller_rabin(n, k = 8):
-    '''Miller-Rabin Primality Test. Probabilistically determine if n is prime.
+    '''Perform the Miller-Rabin Primality Test on n.
 
     Parameters
     ----------
     n : int
-        n is the number to be tested.
+        n is the number to be probabilistically tested.
     k : int, optional
-        k determines the test's accuracy. It describes the number of iterations
-        of the test to be performed. The default is 8.
+        k determines the test's accuracy. It describes the number of
+        iterations of the test to be performed. The default is 8.
 
     Returns
     -------
     bool
-        Return True if n passes the Miller-Rabin primality test and False 
-        otherwise.
+        Return True if n passes the Miller-Rabin primality test and
+        False otherwise.
 
     '''
     if n < 2 or n % 1 != 0:
         return False
-    
+
     if n in (2, 3):
         return True
-    
+
     r = 0
     d = n - 1
     while d % 2 == 0:
         r += 1
         d //= 2
-    
+
     for _ in range(k):
         a = random.randint(2, n - 2)
         x = pow(a, d, n)
-        
+
         if x == 1 or x == n - 1: continue
-    
+
         cont = False
         for _ in range(r - 1):
             x = pow(x, 2, n)
             if x == n - 1: cont = True; break
-        
+
         if cont: continue
-                
+
         return False
-    
+
     return True
 
 
 def is_composite(n):
-    '''Test if n is a composite number by checking potential prime factors of n.
+    '''Test if n is a composite by checking potential prime factors.
 
     Parameters
     ----------
@@ -237,10 +241,10 @@ def is_composite(n):
     '''
     if n == 1:
         return True
-    
+
     if n < 1 or n % 1 != 0 or n == 2:
         return False
-    
+
     stop = n ** 0.5
     for prime in prime_stream():
         if n % prime == 0:
@@ -267,40 +271,41 @@ def is_polygonal(n, s):
 
     '''
     numerator = (8*n*(s - 2) + (s - 4)**2)**0.5 + s - 4
-    denominator = 2*(s - 2) 
-    return (numerator / denominator) % 1 == 0 
-        
+    denominator = 2*(s - 2)
+    return (numerator / denominator) % 1 == 0
+
 
 def is_fibonacci(n, start = (0, 1)):
     '''Test if n is a Fibonacci number.
-    
+
     Parameters
     ----------
     n : int
         n is the number to be tested.
     start : tuple or list of intengers, optional
-        Integers to initialize the Fibonacci sequence. By changing start, other 
-        generalizations of the Fibonacci numbers can be generated. For instance, 
-        with start = (0, 0, 1), the Tribonacci numbers will be generated. The 
-        default is (0, 1).    
+        Integers to initialize the Fibonacci sequence. By changing
+        start, other generalizations of the Fibonacci numbers can be
+        generated. For instance, with start = (0, 0, 1), the Tribonacci
+        numbers will be generated. The default is (0, 1).
 
     Returns
     -------
     bool
-        Return True if n is a positive Fibonacci number and False otherwise.
+        Return True if n is a positive Fibonacci number and False
+        otherwise.
 
     '''
     if n in start:
         return True
-    
+
     if n < max(start):
         return False
-    
+
     if n <= nth_fibonacci(1475) and tuple(start) == (0, 1):
         phi = 0.5 + 0.5 * math.sqrt(5.0)
         a = phi * n
         return n == 0 or abs(round(a) - a) < 1.0 / n
-    
+
     for fib in fibonacci_stream(start=start):
         if n == fib:
             return True
@@ -316,10 +321,10 @@ def is_pell(n, start = (0, 1)):
     n : int
         n is the number to be tested.
     start : tuple or list of integers, optional
-        Integers to initialize the Pell sequence. The length of start must equal
-        two. By changing start, other generalizations of the Pell numbers can 
-        be generated. For instance, Pell–Lucas numbers can be generated with 
-        start = (2, 2). The default is (0, 1).
+        Integers to initialize the Pell sequence. The length of start
+        must equal two. By changing start, other generalizations of the
+        Pell numbers can be generated. For instance, Pell–Lucas numbers
+        can be generated with start = (2, 2). The default is (0, 1).
 
     Returns
     -------
@@ -332,62 +337,64 @@ def is_pell(n, start = (0, 1)):
             return True
         if pell > n:
             return False
-   
+
 
 ## INDEX
 def nth_fibonacci(n, start = (0, 1)):
     '''Return the Fibonacci number at index n or F(n).
-    
+
     Parameters
     ----------
-    n : int, 
+    n : int,
         Index of the Fibonacci number. Negative indexes are supported.
-    
+
     start : tuple or list of intengers, optional
-        Integers to initialize the Fibonacci sequence. By changing start, other 
-        generalizations of the Fibonacci numbers can be found. For instance, 
-        with start = (0, 0, 1), the Tribonacci number at index n will be 
-        returned. The default is (0, 1). 
-    
+        Integers to initialize the Fibonacci sequence. By changing
+        start, other generalizations of the Fibonacci numbers can be
+        found. For instance, with start = (0, 0, 1), the Tribonacci
+        number at index n will be returned. The default is (0, 1).
+
     Returns
     -------
     int
         Return F(n).
-    
+
     '''
     if 0 <= n < len(start):
         return start[n]
-    
+
     elif n > 0:
         adjust = len(start) - 1
-                
+
         a_str = []
         for i in range(0, len(start)):
             if i == 0:
                 a_str.append(' '.join('1' for j in start))
             else:
-                a_str.append(' '.join('1' if i - 1 == j else '0' for j in range(len(start))))
-        
+                a_lst = ['1' if i-1 == j else '0' for j in range(len(start))]
+                a_str.append(' '.join(a_lst))
+
         a = np.matrix('; '.join(a_str), dtype=np.object)
-        b = np.matrix('; '.join([str(i) for i in start[::-1]]), dtype=np.object)    
-        
+        b_lst = [str(i) for i in start[::-1]]
+        b = np.matrix('; '.join(b_lst),dtype=np.object)
+
         return np.matmul(np.linalg.matrix_power(a, n - adjust), b).item(0)
-    
+
     elif tuple(start) == (0, 1):
         if n % 2 == 0:
             c = -1
         else:
             c = 1
-        
+
         return c*nth_fibonacci(abs(n), start=start)
-    
+
     elif tuple(start) == (2, 1):
         if n % 2 == 1:
             c = -1
         else:
             c = 1
         return c*nth_fibonacci(abs(n), start=start)
-    
+
     else:
         for i, f in enumerate(negafibonacci_stream(start=start)):
             if i == abs(n):

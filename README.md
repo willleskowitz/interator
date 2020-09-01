@@ -1,6 +1,12 @@
 # interator
 Module for integer sequence generation and related conditional tests.
 
+## Installation
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install interator.
+```bash
+pip install interator
+```
+
 ## Contents
 ### Fibonacci Sequence
 

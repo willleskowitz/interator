@@ -52,10 +52,10 @@ Please note the Lucas numbers should not be confused with the Lucas sequence. Th
 | `is_composite(n)`        | Test if n is a composite number by checking potential prime factors |
 
 ### Polygonal Numbers
-| **Functions**        | **Description**                               |
-|----------------------|-----------------------------------------------|
-| `polygonal_stream`   | Yield the next s-gonal number starting with 1 |
-| `is_polygonal(n, s)` | Test if n is an s-gonal number                |
+| **Functions**           | **Description**                               |
+|-------------------------|-----------------------------------------------|
+| `polygonal_stream(s)`   | Yield the next s-gonal number starting with 1 |
+| `is_polygonal(n, s)`    | Test if n is an s-gonal number                |
 
 ## Licensing
 This project is licensed under the MIT License.

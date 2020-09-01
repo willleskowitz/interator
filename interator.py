@@ -7,6 +7,7 @@ import random
 import collections
 import numpy as np
 
+
 ## SEQUENCE GENERATORS
 def prime_stream():
     '''Yield the next prime number starting with 2.'''
@@ -174,7 +175,7 @@ def is_prime(n):
         
 
 def miller_rabin(n, k = 8):
-    '''The Miller-Rabin Primality Test. Probabilistically determine if n is prime.
+    '''Miller-Rabin Primality Test. Probabilistically determine if n is prime.
 
     Parameters
     ----------
@@ -193,6 +194,9 @@ def miller_rabin(n, k = 8):
     '''
     if n < 2 or n % 1 != 0:
         return False
+    
+    if n in (2, 3):
+        return True
     
     r = 0
     d = n - 1
@@ -234,7 +238,7 @@ def is_composite(n):
     if n == 1:
         return True
     
-    if n < 1 or n % 1 != 0:
+    if n < 1 or n % 1 != 0 or n == 2:
         return False
     
     stop = n ** 0.5
@@ -265,19 +269,20 @@ def is_polygonal(n, s):
     numerator = (8*n*(s - 2) + (s - 4)**2)**0.5 + s - 4
     denominator = 2*(s - 2) 
     return (numerator / denominator) % 1 == 0 
+        
 
-def perfect_square(x):
-    # FIXME! Test for perfect square without taking sqaure? Needs larger int processing
-    sqaure = int(x**0.5)
-    return sqaure * sqaure == x
-
-def is_fibonacci(n):
+def is_fibonacci(n, start = (0, 1)):
     '''Test if n is a Fibonacci number.
     
     Parameters
     ----------
     n : int
         n is the number to be tested.
+    start : tuple or list of intengers, optional
+        Integers to initialize the Fibonacci sequence. By changing start, other 
+        generalizations of the Fibonacci numbers can be generated. For instance, 
+        with start = (0, 0, 1), the Tribonacci numbers will be generated. The 
+        default is (0, 1).    
 
     Returns
     -------
@@ -285,12 +290,24 @@ def is_fibonacci(n):
         Return True if n is a positive Fibonacci number and False otherwise.
 
     '''
-    if n < 0:
+    if n in start:
+        return True
+    
+    if n < max(start):
         return False
-        
-    return perfect_square(5*n*n + 4) or perfect_square(5*n*n - 4)
+    
+    if n <= nth_fibonacci(1475) and tuple(start) == (0, 1):
+        phi = 0.5 + 0.5 * math.sqrt(5.0)
+        a = phi * n
+        return n == 0 or abs(round(a) - a) < 1.0 / n
+    
+    for fib in fibonacci_stream(start=start):
+        if n == fib:
+            return True
+        if fib > n:
+            return False
 
-   
+
 def is_pell(n, start = (0, 1)):
     '''Test if n is a Pell number.
 
@@ -319,12 +336,12 @@ def is_pell(n, start = (0, 1)):
 
 ## INDEX
 def nth_fibonacci(n, start = (0, 1)):
-    '''Return the Fibonacci number at index F(n).
+    '''Return the Fibonacci number at index n or F(n).
     
     Parameters
     ----------
     n : int, 
-        Index of the Fibonacci number.
+        Index of the Fibonacci number. Negative indexes are supported.
     
     start : tuple or list of intengers, optional
         Integers to initialize the Fibonacci sequence. By changing start, other 
@@ -332,27 +349,46 @@ def nth_fibonacci(n, start = (0, 1)):
         with start = (0, 0, 1), the Tribonacci number at index n will be 
         returned. The default is (0, 1). 
     
-    Yields
-    ------
+    Returns
+    -------
     int
-        After yielding the initial integers in start, the next value is the sum
-        of the preceding values. The length of start determines how many  
-        preceding values will be summed to generate the next value.
+        Return F(n).
+    
     '''
-    if n < len(start):
+    if 0 <= n < len(start):
         return start[n]
     
-    adjust = len(start) - 2    
-    a_str = []
-    for i in range(-1, len(start) - 1):
-        if i == -1:
-            a_str.append(' '.join('1' for _ in range(len(start))))
-        else:
-            a_str.append(' '.join('1' if i == j else '0' for j in range(len(start))))
-    
-    a = np.matrix('; '.join(a_str), dtype=np.object)
-    b = np.matrix('; '.join([str(i) for i in start]), dtype=np.object)     
-    
-    return np.matmul(np.linalg.matrix_power(a, n - adjust), b).item(0)
+    elif n > 0:
+        adjust = len(start) - 1
+                
+        a_str = []
+        for i in range(0, len(start)):
+            if i == 0:
+                a_str.append(' '.join('1' for j in start))
+            else:
+                a_str.append(' '.join('1' if i - 1 == j else '0' for j in range(len(start))))
         
-     
+        a = np.matrix('; '.join(a_str), dtype=np.object)
+        b = np.matrix('; '.join([str(i) for i in start[::-1]]), dtype=np.object)    
+        
+        return np.matmul(np.linalg.matrix_power(a, n - adjust), b).item(0)
+    
+    elif tuple(start) == (0, 1):
+        if n % 2 == 0:
+            c = -1
+        else:
+            c = 1
+        
+        return c*nth_fibonacci(abs(n), start=start)
+    
+    elif tuple(start) == (2, 1):
+        if n % 2 == 1:
+            c = -1
+        else:
+            c = 1
+        return c*nth_fibonacci(abs(n), start=start)
+    
+    else:
+        for i, f in enumerate(negafibonacci_stream(start=start)):
+            if i == abs(n):
+                return f

@@ -119,31 +119,44 @@ def negafibonacci_stream(start = (0, 1)):
         last.appendleft(next_n)
 
 
-def pell_stream(start = (0, 1)):
-    '''Yield the next Pell number starting with P(0).
+def lucas_stream(P = 2, Q = -1, start = (0, 1)):
+    '''Yield the next number in the (P,−Q)-Lucas sequence.
 
     Parameters
     ----------
+    P : int, optional
+        Fixed integer coefficient defining the sequence. By changing P,
+        other generalizations of the Lucas sequence can be generated.
+        For instance, the 3-Fibonacci sequence can be generated with
+        P = 3. The default is 2.
+    Q : int, optional
+        Fixed integer coefficient defining the sequence. By changing Q,
+        other generalizations of the Lucas sequence can be generated.
+        For instance, the Jacobsthal numbers can be generated with
+        P = 1 and Q = -2. The default is -1.
     start : tuple or list of integers, optional
-        Integers to initialize the Pell sequence. The length of start
+        Integers to initialize the Lucas sequence. The length of start
         must equal two. By changing start, other generalizations of the
-        Pell can be generated. For instance, Pell–Lucas numbers can be
-        generated with start = (2, 2). The default is (0, 1).
+        Lucas sequence can be generated. For instance, Pell–Lucas
+        numbers can be generated with start = (2, 2). The default is (0, 1).
 
     Yields
     ------
     int
-        After yielding the initial integers in start, the next value is
-        the sum of twice the previous Pell number and the Pell number
-        before that.
+        Yields U(0), U(1), ... U(n) where U(n) is defined by
 
+        U(0) = start[0]
+        U(1) = start[1]
+        U(n + 2) = P*U(n + 1) − Q*U(n)
+
+        By default, the Pell numbers will be generated.
     '''
     for n in start:
         yield n
 
     n1, n2 = start
     while True:
-        next_n = n1 + n2 + n2
+        next_n = P*n2 - Q*n1
         yield next_n
         n1, n2 = n2, next_n
 
@@ -313,29 +326,41 @@ def is_fibonacci(n, start = (0, 1)):
             return False
 
 
-def is_pell(n, start = (0, 1)):
-    '''Test if n is a Pell number.
+def is_lucas(n, P = 2, Q = -1, start = (0, 1)):
+    '''Test if n is within the (P,−Q)-Lucas sequence.
 
     Parameters
     ----------
-    n : int
-        n is the number to be tested.
+    U(n + 2) = P*U(n + 1) − Q*U(n)
+
+    P : int, optional
+        Fixed integer coefficient defining the sequence. By changing P,
+        other generalizations of the Lucas sequence can be generated.
+        For instance, the 3-Fibonacci sequence can be generated with
+        P = 3. The default is 2.
+    Q : int, optional
+        Fixed integer coefficient defining the sequence. By changing Q,
+        other generalizations of the Lucas sequence can be generated.
+        For instance, the Jacobsthal numbers can be generated with
+        P = 1 and Q = -2. The default is -1.
     start : tuple or list of integers, optional
-        Integers to initialize the Pell sequence. The length of start
+        Integers to initialize the Lucas sequence. The length of start
         must equal two. By changing start, other generalizations of the
-        Pell numbers can be generated. For instance, Pell–Lucas numbers
-        can be generated with start = (2, 2). The default is (0, 1).
+        Lucas sequence can be generated. For instance, Pell–Lucas
+        numbers can be generated with start = (2, 2). The default is
+        (0, 1).
 
     Returns
     -------
     bool
-        Return True if n is a Pell number and False otherwise.
+        Return True if n is within the within the (P,−Q)-Lucas sequence
+        and False otherwise.
 
     '''
-    for pell in pell_stream(start=start):
-        if n == pell:
+    for lucas in lucas_stream(P = P, Q = Q, start = start):
+        if n == lucas:
             return True
-        if pell > n:
+        if lucas > n:
             return False
 
 
@@ -347,7 +372,6 @@ def nth_fibonacci(n, start = (0, 1)):
     ----------
     n : int,
         Index of the Fibonacci number. Negative indexes are supported.
-
     start : tuple or list of intengers, optional
         Integers to initialize the Fibonacci sequence. By changing
         start, other generalizations of the Fibonacci numbers can be
